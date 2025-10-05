@@ -9,4 +9,4 @@ model:
   dim: 384
 
 data:
-  jsonl_path: data/input.jsonl
+  path: /mnt/disk2/ehsan.tavan/search_env/data/persian_wikipedia_100.jsonl

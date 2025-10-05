@@ -12,9 +12,15 @@ class MilvusConfig(BaseModel):
 class ModelConfig(BaseModel):
     name: str = "sentence-transformers/all-MiniLM-L6-v2"
 
+
+class DataConfig(BaseModel):
+    path: str = Field("data.jsonl", description="Path to the JSONL data file to be ingested")
+
+
 class Config(BaseModel):
     milvus: MilvusConfig = MilvusConfig()
     model: ModelConfig = ModelConfig()
+    data: DataConfig = DataConfig()
 
 
     @staticmethod
