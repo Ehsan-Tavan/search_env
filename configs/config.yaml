@@ -1,0 +1,12 @@
+milvus:
+  host: 127.0.0.1
+  port: 19530
+  collection_name: persian_wikipedia_2
+  db_name: Search_Env
+
+model:
+  name: /mnt/disk2/ehsan.tavan/search_env/embedding_model/multilingual-e5-small
+  dim: 384
+
+data:
+  jsonl_path: data/input.jsonl
