@@ -10,11 +10,16 @@ class MilvusConfig(BaseModel):
 
 
 class ModelConfig(BaseModel):
-    name: str = "sentence-transformers/all-MiniLM-L6-v2"
+    name: str = Field(
+        "sentence-transformers/all-MiniLM-L6-v2",
+        description="Name or path of the embedding model"
+    )
 
 
 class DataConfig(BaseModel):
-    path: str = Field("data.jsonl", description="Path to the JSONL data file to be ingested")
+    path: str = Field("data.jsonl", description="Path to the JSONL file to ingest")
+    chunk_size: int = Field(500, description="Chunk size for document splitting")
+    chunk_overlap: int = Field(100, description="Overlap between chunks")
 
 
 class Config(BaseModel):
