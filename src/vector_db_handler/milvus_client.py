@@ -40,7 +40,7 @@ class MilvusHandler:
             fields = [
                 FieldSchema(name="id", dtype=DataType.INT64, is_primary=True, auto_id=True),
                 FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=dim),
-                FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=500),
+                FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=1000),
             ]
 
             schema = CollectionSchema(fields, description="Text embeddings collection")
