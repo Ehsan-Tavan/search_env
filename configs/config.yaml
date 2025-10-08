@@ -1,7 +1,7 @@
 milvus:
   host: 127.0.0.1
   port: 19530
-  collection_name: persian_wikipedia_2
+  collection_name: persian_wikipedia_6
   db_name: Search_Env
 
 model:
