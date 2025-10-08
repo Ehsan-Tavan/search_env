@@ -16,7 +16,7 @@ def detect_device() -> str:
         return "cpu"
 
 
-def search_tool(
+def searching_tool(
         query: str,
         source: str = "milvus",
         top_k: int = 5,

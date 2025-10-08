@@ -24,3 +24,6 @@ requests>=2.32.0
 # Optional (only if you use environment files or templates)
 python-dotenv>=1.0.1
 Jinja2>=3.1.4
+
+# Unittest
+pytest~=8.4.2

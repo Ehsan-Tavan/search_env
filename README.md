@@ -216,3 +216,15 @@ and run:
 ```bash
 python -m src.app.main --config configs/config.yaml
 ```
+
+## 🧪 Running Tests
+
+The `tests` package contains unittests for all major modules in `search_env`, including the Milvus client, configuration loader, and search components.
+
+You can run all tests from project root:
+
+```bash
+python -m unittest -v
+```
+
+🧠 *This command automatically discovers and runs all files matching the pattern test*.py inside `search_env` project (e.g., src/tests/test_vector_db_handler.py).
