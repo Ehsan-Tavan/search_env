@@ -1,93 +1,218 @@
-# search_env
+# 🔍 search_env — A Search Engine API for LLMs
+
+`earch_env` is a **search and retrieval API** that creates a **external environment** for **Large Language Models (LLMs)** to interact with **vector-based search systems** during reasoning.
+
+It enables the development of **SearchLLMs** — models that can:  
+- 🔍 Query external information sources,  
+- 🧩 Retrieve and reason over factual evidence,  
+- 🧠 Generate grounded, explainable answers.  
+
+By combining **LLMs**, **Milvus vector search**, and **retrieval-augmented reasoning**, `search_env` bridges the gap between static knowledge and dynamic information retrieval.
 
 
+## ✨ Key Features
 
-## Getting started
+✅ **Modular Architecture —** Plug-and-play search strategies (SimpleSearch, HashSearch, or custom).  
+✅ **API-Driven —** Exposes clean REST endpoints for search, index, and health-check operations.  
+✅ **LLM Integration Ready —** Built for reasoning loops that involve querying and retrieving.  
+✅ **Configurable —** All parameters managed through YAML configs and environment variables.  
+✅ **Docker Support —** One-line setup for reproducible environments.  
+✅ **Scalable Design —** Easily extend or integrate new backends (e.g., vector DBs, hybrid retrieval).
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 🚀 Quick Start
+Clone the repository and launch the API to get up and running quickly:
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
+```bash
+git clone https://gitlab.partdp.ir/naturallanguageprocessing/lm-training/search_env/
+cd search_env
 ```
-cd existing_repo
-git remote add origin https://gitlab.partdp.ir/naturallanguageprocessing/lm-training/search_env.git
-git branch -M main
-git push -uf origin main
+
+Then, you can run search_env either via Docker or locally:
+
+### 1. Docker:
+
+[//]: # (Build and run the containerized API:)
+
+[//]: # (```bash)
+
+[//]: # (docker build -t search_env .)
+
+[//]: # (docker run -p 8000:8000 search_env)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (The API will be available at http://localhost:8000.)
+
+### 2. Local (Python):
+Install dependencies and start the server:
+
+```bash
+pip install -r requirements.txt
+python -m src.app.main --config configs/config.yaml
 ```
 
-## Integrate with your tools
+This also starts the server on port `5250` by default.
 
-- [ ] [Set up project integrations](https://gitlab.partdp.ir/naturallanguageprocessing/lm-training/search_env/-/settings/integrations)
+Once running, the search_env API is ready to accept HTTP requests.
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+⚙️ Configuration Explained (`configs/config.yaml`)
 
-## Test and Deploy
+Your configuration defines **three main components:** the vector database (Milvus), the embedding model, and the input data used for indexing and search.
 
-Use the built-in continuous integration in GitLab.
+### 🧩 Example
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```yaml
+milvus:
+  host: 127.0.0.1
+  port: 19530
+  collection_name: persian_wikipedia
+  db_name: Search_Env
 
-***
+model:
+  name: model_path
+  dim: 384
 
-# Editing this README
+data:
+  path: data_path
+  chunk_size: 256
+  chunk_overlap: 32
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+#### 🔍 Breakdown
 
-## Suggestions for a good README
+**1. Milvus Configuration**
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+| Key               | Description                                                                               |
+| ----------------- | ----------------------------------------------------------------------------------------- |
+| `host`            | IP address of the Milvus vector database (default: `127.0.0.1`)                           |
+| `port`            | Milvus service port (default: `19530`)                                                    |
+| `collection_name` | Name of the Milvus collection that stores your text embeddings (e.g. `persian_wikipedia`) |
+| `db_name`         | Logical database name inside Milvus (e.g. `Search_Env`)                                   |
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+🧠 *Milvus is a high-performance vector database optimized for similarity search. `search_env` uses it to store and retrieve embeddings efficiently.*
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+**2. Model Configuration**
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+| Key    | Description                                                              |
+| ------ | ------------------------------------------------------------------------ |
+| `name` | Path to the embedding model (e.g., HuggingFace model or local directory) |
+| `dim`  | Dimensionality of the embedding vectors produced by the model            |
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+💡 *In your setup, **multilingual-e5-small** (dimension 384) is used for embedding Persian Wikipedia text, making the system multilingual and lightweight.*
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+---
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+**3. Data Configuration**
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+| Key             | Description                                                            |
+| --------------- | ---------------------------------------------------------------------- |
+| `path`          | Path to the input dataset (JSONL format) containing raw text documents |
+| `chunk_size`    | Number of tokens or characters per text chunk during indexing          |
+| `chunk_overlap` | Number of overlapping tokens/characters between consecutive chunks     |
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+📚 *Chunking allows better retrieval granularity — long documents are broken into smaller pieces so that the LLM retrieves only relevant portions of text.*
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+## 🧠 Example Workflow
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- 1. **Load data** from `data.path`
+
+- 2. **Chunk text** using `chunk_size` and `chunk_overlap`
+
+- 3. **Encode each chunk** into a 384-dimensional vector using `model.name`
+
+- 4. **Store vectors** in **Milvus** under the specified `collection_name`
+
+- 5. **Query** Milvus for the top-k similar embeddings during search
+
+## 🔍 Example API Usage
+
+**Search**
+
+```bash
+curl -X POST http://localhost:5250/search \
+     -H "Content-Type: application/json" \
+     -d '{"query": "پیشرفت‌های اخیر در هوش مصنوعی"}'
+```
+
+**Example Response**
+
+```json
+[
+    {
+        "id": 461347537240209218,
+        "score": 0.873076856136322,
+        "text": "text",
+        "meta": {}
+    },
+    {
+        "id": 461347537240210140,
+        "score": 0.860804557800293,
+        "text": "text",
+        "meta": {}
+    },
+    {
+        "id": 461347537240209422,
+        "score": 0.8587036728858948,
+        "text": "text",
+        "meta": {}
+    },
+    {
+        "id": 461347537240209310,
+        "score": 0.8570656776428223,
+        "text": "text",
+        "meta": {}
+    },
+    {
+        "id": 461347537240210117,
+        "score": 0.855384349822998,
+        "text": "text",
+        "meta": {}
+    }
+]
+```
+
+## 🧩 Extend and Customize
+
+Want to experiment with different retrieval techniques?
+
+### 1 .Add a new search method:
+
+```python
+from .base import SearchClient, SearchResult
+
+class BM25Search(SearchClient):
+    def __init__(self, corpus):
+        self.corpus = corpus
+        # Initialize BM25 index here
+
+    def search(self, query: str, top_k: int = 5):
+        # Replace with your logic
+        results = self.corpus.get_top_k(query, k=top_k)
+        return [
+            SearchResult(id=i, score=s, text=t)
+            for i, (t, s) in enumerate(results)
+        ]
+
+    def warmup(self):
+        print("BM25 index loaded.")
+```
+
+Then update your `config.yaml` or runtime argument to use your new method:
+
+```yaml
+search_method: "BM25Search"
+```
+
+and run:
+
+```bash
+python -m src.app.main --config configs/config.yaml
+```
