@@ -10,5 +10,5 @@ model:
 
 data:
   path: /mnt/disk2/ehsan.tavan/search_env/data/persian_wikipedia_100.jsonl
-  chunk_size: 500
-  chunk_overlap: 100
+  chunk_size: 256
+  chunk_overlap: 32
