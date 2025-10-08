@@ -4,6 +4,7 @@ from src.configurations import Config
 from src.vector_db_handler import MilvusHandler
 from src.vector_db_handler import Embedder
 from src.data_loader import JSONLLoader, Chunker
+from src.data_loader import clean_text
 
 
 if __name__ == "__main__":
@@ -27,10 +28,14 @@ if __name__ == "__main__":
 
     milvus_obj = MilvusHandler(config=config.milvus)
     embedder = Embedder(config.model.name)
-    chunker = Chunker(chunk_size=config.data.chunk_size, chunk_overlap=config.data.chunk_overlap)
+    chunker = Chunker(chunk_size=config.data.chunk_size,
+                      chunk_overlap=config.data.chunk_overlap,
+                      model_name=config.model.name)
 
     texts = JSONLLoader.load_texts(config.data.path, text_field="text")
-    chunks = chunker.chunk_text(texts=texts)
+    clean_texts = [clean_text(text) for text in texts]
+
+    chunks = chunker.chunk_text(texts=clean_texts)
 
     embeddings = embedder.encode_texts(chunks)
 
