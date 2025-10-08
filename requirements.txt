@@ -1,0 +1,26 @@
+# Core server & API
+fastapi>=0.115.0
+uvicorn>=0.30.0
+
+# Vector database integration
+pymilvus>=2.6.2
+
+# Embedding & NLP
+sentence-transformers>=2.5.1
+transformers>=4.46.0
+torch>=2.5.0
+
+# Data processing
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.5.0
+scipy>=1.13.0
+
+# Utilities
+PyYAML>=6.0
+tqdm>=4.66.0
+requests>=2.32.0
+
+# Optional (only if you use environment files or templates)
+python-dotenv>=1.0.1
+Jinja2>=3.1.4
