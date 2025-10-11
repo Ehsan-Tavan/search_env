@@ -55,11 +55,32 @@ Clone the repository and launch the API to get up and running quickly:
 ```bash
 git clone https://gitlab.partdp.ir/naturallanguageprocessing/lm-training/search_env/
 cd search_env
+pip install -r requirements.txt
 ```
+
+### 1️⃣ Start Milvus and Dependencies via Docker Compose  
+After cloning the repo, go to the `docker_compose` directory and run:
+
+```bash
+cd docker_compose
+docker compose up -d
+```
+
+This command will spin up `Milvus`, `etcd`, and `MinIO` containers required by the system.  
+Once the services are running, you can proceed to populate the Milvus database with your data.
+
+### 2️⃣ Add Data to Milvus
+To index your data into Milvus, run the following command:
+```bash
+python save_data_to_db.py --config configs/config.yaml
+```
+
+This script loads the dataset specified in your config file, chunks it, embeds it, and stores the resulting vectors into Milvus for retrieval.
+
 
 Then, you can run search_env either via Docker or locally:
 
-### 1. Docker:
+[//]: # (### 1. Docker:)
 
 [//]: # (Build and run the containerized API:)
 
@@ -74,17 +95,16 @@ Then, you can run search_env either via Docker or locally:
 [//]: # ()
 [//]: # (The API will be available at http://localhost:8000.)
 
-### 2. Local (Python):
-Install dependencies and start the server:
+
+### 3️⃣ Run the Search API
+
+Once your data is indexed, start the API server:
 
 ```bash
-pip install -r requirements.txt
 python -m src.app.main --config configs/config.yaml
 ```
 
 This also starts the server on port `5250` by default.
-
-Once running, the search_env API is ready to accept HTTP requests.
 
 
 ⚙️ Configuration Explained (`configs/config.yaml`)
