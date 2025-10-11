@@ -12,12 +12,41 @@ By combining **LLMs**, **Milvus vector search**, and **retrieval-augmented reaso
 
 ## ✨ Key Features
 
+✅ **Multilingual Embeddings —** Uses the multilingual-e5-small model to encode text into 384-dimensional embeddings, enabling efficient multilingual retrieval (e.g., Persian, English).  
+✅ **Token-Based Chunking —** Documents are split into manageable segments using a token chunker to preserve semantic coherence and improve retrieval accuracy.  
 ✅ **Modular Architecture —** Plug-and-play search strategies (SimpleSearch, HashSearch, or custom).  
 ✅ **API-Driven —** Exposes clean REST endpoints for search, index, and health-check operations.  
 ✅ **LLM Integration Ready —** Built for reasoning loops that involve querying and retrieving.  
 ✅ **Configurable —** All parameters managed through YAML configs and environment variables.  
 ✅ **Docker Support —** One-line setup for reproducible environments.  
 ✅ **Scalable Design —** Easily extend or integrate new backends (e.g., vector DBs, hybrid retrieval).
+
+## 🧩 Document Chunking and Embedding
+To handle large documents efficiently, `search_env` **chunks text by tokens** before embedding. This ensures that each chunk fits within the model’s context window and retains coherent meaning.
+
+Below is the **token-based** chunker used in the pipeline:
+
+```python
+def chunk_text(self, texts):
+    all_chunks = []
+    for doc in texts:
+        # Encode into tokens
+        tokens = self.tokenizer.encode(doc, add_special_tokens=False)
+
+        # Chunk by token length
+        for i in range(0, len(tokens), self.chunk_size - self.chunk_overlap):
+            chunk_tokens = tokens[i:i + self.chunk_size]
+            chunk_text = self.tokenizer.decode(chunk_tokens)
+            all_chunks.append(chunk_text.strip())
+
+    return all_chunks
+```
+
+Each document is split into overlapping token chunks (`chunk_size` and `chunk_overlap` configurable via YAML).  
+Then, each chunk is embedded using **multilingual-e5-small**, a lightweight and high-quality multilingual model.
+
+This combination improves retrieval precision and efficiency across languages and long documents.
+
 
 
 ## 🚀 Quick Start
