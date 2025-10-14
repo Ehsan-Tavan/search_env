@@ -1,6 +1,6 @@
 import argparse
 
-from src.search import search_tool
+from src.search import searching_tool
 from src.configurations import Config
 
 
@@ -23,5 +23,5 @@ if __name__ == "__main__":
 
     config = Config.from_yaml(args.config)
 
-    results = search_tool(query="سعدی در قرن چند میزیست؟", config=config)
+    results = searching_tool(query="سعدی در قرن چند میزیست؟", config=config)
     print(results)
