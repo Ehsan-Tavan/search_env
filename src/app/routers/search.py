@@ -10,7 +10,6 @@ router = APIRouter(tags=["Search"])
 def search_endpoint(req: SearchRequest, request: Request):
     try:
         config = request.app.state.config
-        print(config)
         client = get_search_client(req.source, config=config)
         results = client.search(req.query, top_k=req.top_k)
         return [r.model_dump() for r in results]
