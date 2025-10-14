@@ -1,10 +1,19 @@
 import argparse
+from tqdm import tqdm
+from itertools import islice
 
 from src.configurations import Config
 from src.vector_db_handler import MilvusHandler
 from src.vector_db_handler import Embedder
 from src.data_loader import JSONLLoader, Chunker
 from src.data_loader import clean_text
+
+
+def batched(iterable, batch_size):
+    """Yield successive batches from iterable."""
+    it = iter(iterable)
+    while batch := list(islice(it, batch_size)):
+        yield batch
 
 
 if __name__ == "__main__":
@@ -33,11 +42,27 @@ if __name__ == "__main__":
                       model_name=config.model.name)
 
     texts = JSONLLoader.load_texts(config.data.path, text_field="text")
-    clean_texts = [clean_text(text) for text in texts]
 
-    chunks = chunker.chunk_text(texts=clean_texts)
+    # Batch processing to avoid memory explosion
+    batch_size = 256
+    for text_batch in tqdm(batched(texts, batch_size), desc="Processing text batches"):
+        # Clean
+        clean_texts = [clean_text(t) for t in text_batch]
 
-    embeddings = embedder.encode_texts(chunks)
+        # Chunk
+        chunks = chunker.chunk_text(clean_texts)
 
-    milvus_obj.insert_data(embeddings, chunks)
+        # Embed
+        embeddings = embedder.encode_texts(chunks)
 
+        # Insert into Milvus
+        milvus_obj.insert_data(embeddings, chunks)
+
+
+    # clean_texts = [clean_text(text) for text in tqdm(texts, desc="Cleaning texts", ncols=80)]
+    #
+    # chunks = chunker.chunk_text(texts=clean_texts)
+    #
+    # embeddings = embedder.encode_texts(chunks)
+    #
+    # milvus_obj.insert_data(embeddings, chunks)
